@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table, Divider, Tag } from 'antd';
+import { Table, Divider, Tag ,Card} from 'antd';
 import { connect } from 'dva';
 
 @connect(({ test, loading }) => ({
@@ -72,7 +72,9 @@ export default class Test extends Component {
 
     return (
       <div>
+         <Card style={{ width: 700 }}>
         <Table columns={columns} dataSource={data} />
+        </Card>
       </div>
     );
   }
