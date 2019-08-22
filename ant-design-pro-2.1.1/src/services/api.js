@@ -125,6 +125,34 @@ export async function getFakeCaptcha(mobile) {
   return request(`/api/captcha?mobile=${mobile}`);
 }
 
-export async function queryTest() {
-  return request('/api/testList');
+export async function queryTest(params) {
+  return request(`/api/testList?${stringify(params)}`);
+}
+export async function updateTest(params) {
+  return request('/api/testList', {
+    method: 'POST',
+    body: {
+      ...params,
+      method: 'update',
+    },
+  });
+}
+export async function removeTest(params) {
+  return request('/api/testList', {
+    method: 'POST',
+    body: {
+      ...params,
+      method: 'delete',
+    },
+  });
+}
+
+export async function addTest(params) {
+  return request('/api/testList', {
+    method: 'POST',
+    body: {
+      ...params,
+      method: 'post',
+    },
+  });
 }

@@ -347,7 +347,6 @@ class TableList extends PureComponent {
     dispatch({
       type: 'rule/fetch',
     });
-    console.log(this.props.rule);
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {

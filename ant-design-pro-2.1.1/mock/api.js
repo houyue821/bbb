@@ -1,5 +1,5 @@
 import mockjs from 'mockjs';
-
+import { parse } from 'url';
 const titles = [
   'Alipay',
   'Angular',
@@ -317,29 +317,114 @@ const getActivities = [
   },
 ];
 
-const getTest = [
+// const getTest = [
+//   {
+//     key: '1',
+//     name: 'John Brown',
+//     age: 32,
+//     address: '2019-05-06T04:33:23.994z',
+//     tags: ['nice', 'developer'],
+//   },
+//   {
+//     key: '2',
+//     name: 'Jim Green',
+//     age: 42,
+//     address: '2019-05-07T04:33:23.994z',
+//     tags: ['loser'],
+//   },
+//   {
+//     key: '3',
+//     name: 'Joe Black',
+//     age: 32,
+//     address: '2019-05-08T04:33:23.994z',
+//     tags: ['cool', 'teacher'],
+//   },
+// ];
+
+let result = [
   {
     key: '1',
     name: 'John Brown',
     age: 32,
-    address: 'New York No. 1 Lake Park',
+    date: '2019-05-06T04:33:23.994z',
     tags: ['nice', 'developer'],
   },
   {
     key: '2',
     name: 'Jim Green',
     age: 42,
-    address: 'London No. 1 Lake Park',
+    date: '2019-05-07T04:33:23.994z',
     tags: ['loser'],
   },
   {
     key: '3',
     name: 'Joe Black',
     age: 32,
-    address: 'Sidney No. 1 Lake Park',
+    date: '2019-05-08T04:33:23.994z',
+    tags: ['cool', 'teacher'],
+  },
+  {
+    key: '4',
+    name: 'houyue',
+    age: 32,
+    date: '2019-05-08T04:33:23.994z',
     tags: ['cool', 'teacher'],
   },
 ];
+
+function getTest(req, res,u) {
+ let sourceData1 = result;
+  let url = u;
+  if (!url || Object.prototype.toString.call(url) !== '[object String]') {
+    url = req.url; // eslint-disable-line
+  }
+  const params = parse(url, true).query;
+  if (params.desc) {
+    sourceData1 = sourceData1.filter(data => JSON.stringify(data).indexOf(params.desc) > -1);
+  }
+  const resultList=sourceData1
+    return res.json(resultList);
+  
+  
+ 
+}
+function postList(req, res) {
+  const { /* url = '', */ body } = req;
+  // const params = getUrlParams(url);
+  const { method, key,name,age,address,date } = body;
+  // const count = (params.count * 1) || 20;
+
+  // let result = sourceData1;
+
+  switch (method) {
+    case 'delete':
+      result = result.filter(item => key.indexOf(item.key) === -1);
+      break;
+    case 'update':
+      result.forEach((item, i) => {
+        if (item.key === key) {
+          result[i] = Object.assign(item, body);
+        }
+      });
+      break;
+      case 'post':
+        result.unshift({
+          key:`${result.length}`,
+         name,
+         age,
+         date,
+         address,
+         tags: ['cool', 'teacher'],
+        });
+        break;
+    default:
+      break;
+  }
+
+  return res.json(result);
+}
+
+
 function getFakeCaptcha(req, res) {
   return res.json('captcha-xxx');
 }
@@ -357,4 +442,5 @@ export default {
   'POST /api/fake_list': postFakeList,
   'GET /api/captcha': getFakeCaptcha,
   'GET /api/testList': getTest,
+  'POST /api/testList': postList,
 };
